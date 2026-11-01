@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.env.*
+public/training.json
+public/training.lock
+public/training.json.tmp

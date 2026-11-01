@@ -1,0 +1,25 @@
+I would like to design a tennis training app for my child. it's web based and should be mobile responsive
+
+It shows a list of tennis skillsFor example, 
+
+- Serve
+- Forehand ground stroke
+- Backhand ground stroke
+- Forehand slice
+- Backhand slice
+- Forehand dropshot
+- Backhand dropshot
+- Lobbing
+- Hit on rise
+- Attack high ball
+- Attack short low ball
+- Attack short high ball
+- Volley
+
+For each skill, the user can define one or more useful tips. Everytime, if the user feel a tip is useful, he can tap thumb up on the tip. 
+The confirmation count on the tip will increase by one. All the tips will be shown in the order of decreasing count for each skill. 
+
+The user can edit the title of each tip, delete a tip or add new tip. The user can also add/edit/delete skills. 
+
+The data can be saved as a json file in the same folder. use php as backend api. use vite for frontend. Local testing site: http://tennis_trainer. 
+Production url: http://edu.flashpeak.com/tennis_trainer

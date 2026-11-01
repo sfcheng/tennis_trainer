@@ -1,0 +1,4 @@
+Options -Indexes
+<FilesMatch "^(training\.json(\.tmp)?|.*\.lock)$">
+  Require all denied
+</FilesMatch>
