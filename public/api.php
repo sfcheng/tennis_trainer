@@ -14,6 +14,11 @@ function title(array $input): string {
     if ($value === '' || strlen($value) > 500) respond(422, ['error' => 'Please enter a title between 1 and 500 bytes.']);
     return $value;
 }
+function description(array $input): string {
+    $value = $input['description'] ?? '';
+    if (!is_string($value) || strlen($value) > 20000) respond(422, ['error' => 'Please keep the description under 5,000 characters.']);
+    return trim($value);
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 if (!in_array($method, ['GET', 'POST'], true)) {
@@ -32,6 +37,14 @@ try {
         $names = ['Serve', 'Forehand ground stroke', 'Backhand ground stroke', 'Forehand slice', 'Backhand slice', 'Forehand dropshot', 'Backhand dropshot', 'Lobbing', 'Hit on rise', 'Attack high ball', 'Attack short low ball', 'Attack short high ball', 'Volley'];
         $data = ['skills' => array_map(fn($name) => ['id' => bin2hex(random_bytes(8)), 'title' => $name, 'tips' => []], $names)];
     }
+    // Older notebooks contain title-only tips; descriptions are optional.
+    foreach ($data['skills'] as &$existingSkill) {
+        foreach ($existingSkill['tips'] as &$existingTip) {
+            $existingTip['description'] = $existingTip['description'] ?? '';
+        }
+        unset($existingTip);
+    }
+    unset($existingSkill);
     if ($method === 'POST') {
         $input = json_decode(file_get_contents('php://input'), true, 32, JSON_THROW_ON_ERROR);
         if (!is_array($input)) respond(422, ['error' => 'Invalid request.']);
@@ -44,11 +57,14 @@ try {
             $skill = &$data['skills'][$skillIndex];
             if ($action === 'editSkill') $skill['title'] = title($input);
             elseif ($action === 'deleteSkill') array_splice($data['skills'], $skillIndex, 1);
-            elseif ($action === 'addTip') $skill['tips'][] = ['id' => bin2hex(random_bytes(8)), 'title' => title($input), 'count' => 0];
+            elseif ($action === 'addTip') $skill['tips'][] = ['id' => bin2hex(random_bytes(8)), 'title' => title($input), 'description' => description($input), 'count' => 0];
             elseif (in_array($action, ['editTip', 'deleteTip', 'vote'], true)) {
                 $tipIndex = array_search($input['tipId'] ?? '', array_column($skill['tips'], 'id'), true);
                 if ($tipIndex === false) respond(404, ['error' => 'This tip no longer exists.']);
-                if ($action === 'editTip') $skill['tips'][$tipIndex]['title'] = title($input);
+                if ($action === 'editTip') {
+                    $skill['tips'][$tipIndex]['title'] = title($input);
+                    if (array_key_exists('description', $input)) $skill['tips'][$tipIndex]['description'] = description($input);
+                }
                 elseif ($action === 'deleteTip') array_splice($skill['tips'], $tipIndex, 1);
                 else $skill['tips'][$tipIndex]['count']++;
             } else respond(422, ['error' => 'Unknown action.']);

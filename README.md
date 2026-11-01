@@ -1,6 +1,8 @@
 # Court Notes · Tennis Trainer
 
-A responsive tennis notebook built with Vite, plain JavaScript, and a PHP JSON API. Includes all 13 skills from `spec.txt`, skill search, skill/tip creation, editing and deletion, and repeat thumbs-up votes. Tips appear in descending confirmation count. New notebooks start with empty tips.
+A responsive tennis notebook built with Vite, plain JavaScript, and a PHP JSON API. Includes all 13 skills from `spec.txt`, alphabetically sorted skills, skill/tip creation, editing and deletion, and repeat thumbs-up votes. Tips appear in descending confirmation count. New notebooks start with empty tips.
+
+Tips have a short title and an optional detailed description. Tap a title to expand its description and editing controls. Helpful buttons remain visible when tips are collapsed. Existing title-only tips work without migration; descriptions can be added with Edit.
 
 ## Local development
 
