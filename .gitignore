@@ -5,3 +5,4 @@ dist/
 public/training.json
 public/training.lock
 public/training.json.tmp
+.vscode/sftp.json
